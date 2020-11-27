@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/2020/11/27/ctf%E9%A2%98%E7%9B%AE%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
+    
+    <lastmod>2020-11-27</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://example.com/2020/11/27/%E6%97%A0%E8%BE%93%E5%87%BA%E6%93%8D%E4%BD%9C%E4%B9%8B-do-global-dtors-aux/</loc>
     
     <lastmod>2020-11-27</lastmod>
@@ -94,10 +101,24 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>http://example.com/tags/ctf/</loc>
+    <lastmod>2020-11-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
     <loc>http://example.com/categories/GeekPwn/</loc>
+    <lastmod>2020-11-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2020-11-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

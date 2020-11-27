@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-11-27T15:41:30.717Z</updated>
+  <updated>2020-11-27T15:54:46.599Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ctf题目环境搭建</title>
+    <link href="http://example.com/2020/11/27/ctf%E9%A2%98%E7%9B%AE%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+    <id>http://example.com/2020/11/27/ctf%E9%A2%98%E7%9B%AE%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</id>
+    <published>2020-11-27T15:46:49.000Z</published>
+    <updated>2020-11-27T15:54:46.599Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="关于docker："><a href="#关于docker：" class="headerlink" title="关于docker："></a>关于docker：</h1><p>基本命令：（注意权限问题，没有设置权限组时需要加sudo）</p><p>docker ps -a  查看容器</p><p>docker ps  查看正在运行中的容器</p><p>docker images 查看镜像</p><p>service docker start 启动docker服务</p><p>docker start 容器id 启动一个已经停止的容器</p><p>docker stop 容器id  停止一个已经启动的容器</p><p>docker rm 容器id 删除一个容器</p><p>docker rmi 镜像name 删除本地的一个镜像</p><p>docker run -it 镜像名称 /bin/bash 使用某一镜像来运行容器</p><p>docker run -it 容器id /bin/bash 启动某一容器（退出时容器会关闭）</p><p>docker exec -it 容器id /bin/bash 启动某一容器（退出时容器不会关闭）</p><p>docker export 1e560fca3906(容器id） &gt; ubuntu.tar 导出容器 1e560fca3906 快照到本地文件 ubuntu.tar</p><p>cat docker/ubuntu.tar | docker import - test/ubuntu:v1 使用 docker import 从容器快照文件中再导入为镜像， 将快照文件 ubuntu.tar 导入到镜像 test/ubuntu:v1</p><h2 id="题目环境搭建："><a href="#题目环境搭建：" class="headerlink" title="题目环境搭建："></a>题目环境搭建：</h2><p>使用pwn_deploy_chroot部署是目前最方便最安全的方法。</p><p>已经搭建好docker后，</p><p>安装 docker compose 和 git</p><p>sudo apt install docker-compose git</p><p>把仓库克隆到本地</p><p>git clone <a href="https://github.com/giantbranch/pwn_deploy_chroot.git">https://github.com/giantbranch/pwn_deploy_chroot.git</a></p><p><img src="https://app.yinxiang.com/shard/s30/nl/28827712/12d2c890-8e85-44c3-92f4-a8593d5d0e2a/res/cdcc1460-58fb-4614-8703-7c808b2945db.png?resizeSmall&width=832"></p><p>使用方法：</p><p>1、将所有的pwn题目放入bin目录中</p><p><img src="https://app.yinxiang.com/shard/s30/nl/28827712/12d2c890-8e85-44c3-92f4-a8593d5d0e2a/res/4ed39670-ae81-401c-9e1d-829e6ad66123.png?resizeSmall&width=832"></p><p>2、python initialize.py</p><p><img src="https://app.yinxiang.com/shard/s30/nl/28827712/12d2c890-8e85-44c3-92f4-a8593d5d0e2a/res/e390897a-1231-4fd6-ade2-730dfa7fa561.png?resizeSmall&width=832"></p><p>3、 docker-compose up –build -d</p><p><img src="https://app.yinxiang.com/shard/s30/nl/28827712/12d2c890-8e85-44c3-92f4-a8593d5d0e2a/res/ef97a69d-bae1-4890-9a9e-c41d2d9c9450.png?resizeSmall&width=832"></p><p>用netstat -antp | grep docker查看，确认完成</p><p><img src="https://app.yinxiang.com/shard/s30/nl/28827712/12d2c890-8e85-44c3-92f4-a8593d5d0e2a/res/e14b35e7-dbb1-4b83-9e95-ebbb53ec4f83.png?resizeSmall&width=832"></p><p>可以在 config.py中修改配置。</p><p>You can edit config.py to decide whether to replace /bin/sh with catflag</p><p># Whether to replace /bin/sh</p><p>## replace</p><p>REPLACE_BINSH = True</p><p>## not replace(default)</p><p>REPLACE_BINSH = False</p><p>（__注:此docker可以在一个contain中开启多个题目__）</p><p><strong>注：可以使用以下dockers搭建环境，不过一个contain中只可以开启一个题目，常适用与当前ctf比赛环境的搭建</strong></p><p>链接：<a href="https://github.com/CTFTraining/HuXiang_2019_pwn_HackNote/">https://github.com/CTFTraining/HuXiang_2019_pwn_HackNote/</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="环境搭建" scheme="http://example.com/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+    
+    
+    <category term="ctf" scheme="http://example.com/tags/ctf/"/>
+    
+  </entry>
   
   <entry>
     <title>无输出操作之__do_global_dtors_aux</title>
