@@ -116,14 +116,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/pwn/</loc>
+    <loc>http://example.com/tags/buuctf/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/buuctf/</loc>
+    <loc>http://example.com/tags/pwn/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -139,14 +139,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/GeekPwn/</loc>
+    <loc>http://example.com/categories/heap/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/heap/</loc>
+    <loc>http://example.com/categories/GeekPwn/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
