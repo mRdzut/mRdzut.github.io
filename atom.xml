@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-02T15:59:01.629Z</updated>
+  <updated>2020-12-14T05:44:01.678Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>硬件实训一</title>
+    <link href="http://example.com/2020/12/14/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD%E4%B8%80/"/>
+    <id>http://example.com/2020/12/14/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD%E4%B8%80/</id>
+    <published>2020-12-14T05:33:53.000Z</published>
+    <updated>2020-12-14T05:44:01.678Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="台式计算机的硬件选购"><a href="#台式计算机的硬件选购" class="headerlink" title="台式计算机的硬件选购"></a>台式计算机的硬件选购</h1><p>任务：5000块以下配置一台学习人工智能的计算机</p><p>第一节实训课我直接“啊这”好吧，让一个选择恐惧症去京东shopping简直就是折磨，关键还一口气shopping了一个上午。</p><p>下面是我选的配置（5000以下配置人工智能的计算机，简直了好吧！）</p><p><strong>intel:</strong></p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD1-1.png"></p><p><strong>AMD</strong>:</p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD1-2.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="实训" scheme="http://example.com/categories/%E5%AE%9E%E8%AE%AD/"/>
+    
+    
+    <category term="实训" scheme="http://example.com/tags/%E5%AE%9E%E8%AE%AD/"/>
+    
+  </entry>
   
   <entry>
     <title>ZJCTF_2019_EasyHeap</title>
