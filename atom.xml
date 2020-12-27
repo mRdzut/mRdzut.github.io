@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-19T09:43:16.257Z</updated>
+  <updated>2020-12-27T04:32:55.901Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,50 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>硬件实训2-2</title>
+    <link href="http://example.com/2020/12/27/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD2-2/"/>
+    <id>http://example.com/2020/12/27/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD2-2/</id>
+    <published>2020-12-27T03:04:49.000Z</published>
+    <updated>2020-12-27T04:32:55.901Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><strong>任务：利用docker搭建一个本地的cms</strong></p><p><strong>目的：熟悉docker的使用，学习基于容器的应用部署</strong></p><h1 id="引题"><a href="#引题" class="headerlink" title="引题"></a>引题</h1><p>​    docker其实是一种虚拟化的技术，当前我们所了解的虚拟化可以分为主机虚拟化（熟知的vmware）和容器虚拟化（即docker），区别在于容器虚拟化的是操作系统而不是硬件，主机虚拟化是在物理机的基础上再搭建一个完整的主机系统。</p><p>​    用一句话来概括的话，主机级虚拟化就是通过各种各样的手段，把物理资源重新分配，然后抽象出一部分拿来做虚拟机的虚拟硬件，是对硬件的模拟；而容器虚拟化技术相当于把操作系统进行虚拟化，把物理的操作系统模拟为逻辑上的多个操作系统，不同的操作系统有自己的用户空间，实现了应用程序间的隔离。</p><p><strong>两者的对比：</strong></p><p>传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。</p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-1.png"></p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-2.png"></p><p>总结一下docker的优势：运行环境一致、更快的启动速度、隔离性、快速扩展、迁移方便、持续交付和部署、高内聚和低耦合。</p><h2 id="docker基本概念"><a href="#docker基本概念" class="headerlink" title="docker基本概念"></a>docker基本概念</h2><p><strong>Image（镜像）——一个特殊的文件系统:</strong></p><p>相当于是一个 root 文件系统，用于创建 Docker 容器的模板，比如 Ubuntu 系统。</p><p><strong>Container（容器）——镜像运行时的实体:</strong></p><p>容器是独立运行的一个或一组应用，是镜像运行时的实体,镜像（Image）和容器（Container）的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p><p><strong>Repository（仓库）——集中存放镜像文件的地方:</strong></p><p>仓库可看成一个代码控制中心，用来保存镜像。Docker Hub(<a href="https://hub.docker.com/">https://hub.docker.com</a>) 提供了庞大的镜像集合供使用。一个 Docker Registry 中可以包含多个仓库（Repository）；每个仓库可以包含多个标签（Tag）；每个标签对应一个镜像。</p><p>展示一下我的镜像仓库：</p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-3.png"></p><h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>利用不同平台搭建blog</p><p><strong>常用的命令:</strong></p><figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">sudo docker ps <span class="comment">#查看正在运行的container</span></span><br><span class="line">sudo docker ps -a <span class="comment">#查看本地container列表</span></span><br><span class="line">sudo docker images <span class="comment">#查看本地镜像</span></span><br><span class="line">sudo docker -v <span class="comment">#查看docker版本</span></span><br><span class="line">sudo docker-compose -v <span class="comment">#查看docker-compose版本</span></span><br><span class="line">sudo docker-compose up -d <span class="comment">#建立连接运行镜像</span></span><br><span class="line">sudo docker pull tag <span class="comment">#从仓库pull一个镜像到本地</span></span><br><span class="line">sudo docker push tag <span class="comment">#从本地push一个镜像到仓库</span></span><br><span class="line">sudo docker <span class="keyword">run</span><span class="bash"> -it 镜像名称 /bin/bash <span class="comment">#使用某一镜像来运行容器</span></span></span><br><span class="line">sudo docker <span class="keyword">run</span><span class="bash"> -it 容器id /bin/bash <span class="comment">#启动某一容器（退出时容器会关闭）</span></span></span><br><span class="line">sudo docker exec -it 容器id /bin/bash <span class="comment">#启动某一容器（退出时容器不会关闭）</span></span><br><span class="line">sudo docker stop container/image <span class="comment">#停止镜像或容器运行</span></span><br><span class="line">sudo docker start container/image <span class="comment">#开启镜像或容器</span></span><br><span class="line">sudo docker rm container <span class="comment">#删除容器</span></span><br><span class="line">sudo docker rmi image <span class="comment">#删除镜像</span></span><br></pre></td></tr></table></figure><p><strong>1、安装docker</strong></p><p>菜鸟教程提供了一键安装的命令可以直接使用：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -fsSL https:&#x2F;&#x2F;get.docker.com | bash -s docker --mirror Aliyun</span><br></pre></td></tr></table></figure><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-4.png"></p><p><strong>2、更新 apt 包索引</strong></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-5.png"></p><p><strong>3、更新仓库源：</strong></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo add-apt-repository \</span><br><span class="line">   &quot;deb [arch&#x3D;amd64] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;docker-ce&#x2F;linux&#x2F;ubuntu&#x2F; \</span><br><span class="line">  $(lsb_release -cs) \</span><br><span class="line">  stable&quot;</span><br></pre></td></tr></table></figure><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-6.png"></p><p><strong>4、查看docker版本：</strong></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo docker -v</span><br></pre></td></tr></table></figure><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-9.png"></p><p><strong>5、测试docker是否已经安装成功可以运行：</strong></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></figure><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-7.png"></p><p><strong>6、下载是用于定义和运行多容器 Docker 应用程序的工具docker-compose</strong></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install docker-compose</span><br></pre></td></tr></table></figure><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-8.png"></p><p><strong>至此，我们的环境已经搭建完毕，下面就开始搭建blog</strong></p><p>我打算利用mysql+wordpress来搭建一个cms</p><p>环境：ubuntu16.04、mysql5.6、wordpress:latest</p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-10.png"></p><p>环境已经编号，下面来编写docker-compose.yml文件</p><figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">version: <span class="string">&#x27;3&#x27;</span>         <span class="comment"># docker-compose的版本</span></span><br><span class="line">services: <span class="comment">#一个service表示一个container</span></span><br><span class="line">  wordpress:</span><br><span class="line">    image: wordpress     <span class="comment">#选择镜像</span></span><br><span class="line">    restart: always      <span class="comment">#重启策略</span></span><br><span class="line">    ports: <span class="comment">#映射到本地的80端口</span></span><br><span class="line">      - <span class="number">80</span>:<span class="number">80</span></span><br><span class="line">    environment:</span><br><span class="line">      WORDPRESS_DB_HOST: db                  <span class="comment">#wordpress的选择的数据库</span></span><br><span class="line">      WORDPRESS_DB_USER: exampleuser         <span class="comment">#数据库用户</span></span><br><span class="line">      WORDPRESS_DB_PASSWORD: examplepass     <span class="comment">#数据库密码</span></span><br><span class="line">      WORDPRESS_DB_NAME: exampledb           <span class="comment">#数据库名</span></span><br><span class="line">    networks:</span><br><span class="line">      - jackxu-net                           <span class="comment">#配置容器连接的网络</span></span><br><span class="line">    volumes:</span><br><span class="line">      - wordpress:/var/www/html              <span class="comment">#将主机的数据卷或着文件挂载到容器里</span></span><br><span class="line"></span><br><span class="line">  db:</span><br><span class="line">    image: mysql:<span class="number">5.6</span>                         <span class="comment">#镜像</span></span><br><span class="line">    restart: always                          <span class="comment">#重启策略</span></span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_DATABASE: exampledb              <span class="comment">#mysql名</span></span><br><span class="line">      MYSQL_USER: exampleuser                <span class="comment">#mysql用户</span></span><br><span class="line">      MYSQL_PASSWORD: examplepass            <span class="comment">#mysql密码</span></span><br><span class="line">      MYSQL_RANDOM_ROOT_PASSWORD: <span class="string">&#x27;1&#x27;</span>        <span class="comment">#随机一个root账户密码</span></span><br><span class="line">    volumes:</span><br><span class="line">      - db:/var/lib/mysql</span><br><span class="line">    networks:</span><br><span class="line">      - jackxu-net</span><br><span class="line"></span><br><span class="line">volumes:</span><br><span class="line">  wordpress:</span><br><span class="line">  db:</span><br><span class="line">  </span><br><span class="line">networks:</span><br><span class="line">  jackxu-net:</span><br><span class="line">    driver: bridge                          <span class="comment">#桥接模式 </span></span><br></pre></td></tr></table></figure><p>运行脚本</p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-11.png"></p><p>然后进入本地的80端口开始博客的配置</p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-12.png"></p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-13.png"></p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-14.png"></p><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-15.png"></p><p>然后可以美化自己的本地博客，至此，利用docker搭建本地cms完成</p><h1 id="成果图："><a href="#成果图：" class="headerlink" title="成果图："></a>成果图：</h1><p><img src="/postimg/%E5%AE%9E%E8%AE%AD3-16.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="docker、docker-compose、wordpress" scheme="http://example.com/categories/docker%E3%80%81docker-compose%E3%80%81wordpress/"/>
+    
+    
+    <category term="硬件实训" scheme="http://example.com/tags/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>硬件实训2-1</title>
+    <link href="http://example.com/2020/12/27/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD2-1/"/>
+    <id>http://example.com/2020/12/27/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD2-1/</id>
+    <published>2020-12-27T03:04:40.000Z</published>
+    <updated>2020-12-27T03:04:40.676Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>小试牛刀iot</title>
