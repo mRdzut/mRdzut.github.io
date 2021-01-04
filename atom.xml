@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-01-03T12:55:39.163Z</updated>
+  <updated>2021-01-04T13:50:23.723Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,33 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>腾讯云服务器初体验</title>
+    <link href="http://example.com/2021/01/04/%E8%85%BE%E8%AE%AF%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C/"/>
+    <id>http://example.com/2021/01/04/%E8%85%BE%E8%AE%AF%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C/</id>
+    <published>2021-01-04T13:50:23.000Z</published>
+    <updated>2021-01-04T13:50:23.723Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\js\APlayer.min.js&quot; class=&quot;aplayer-se</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>初探netty</title>
     <link href="http://example.com/2021/01/03/%E5%88%9D%E6%8E%A2netty/"/>
     <id>http://example.com/2021/01/03/%E5%88%9D%E6%8E%A2netty/</id>
     <published>2021-01-03T12:36:20.000Z</published>
-    <updated>2021-01-03T12:55:39.163Z</updated>
+    <updated>2021-01-04T14:05:50.602Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="关于netty"><a href="#关于netty" class="headerlink" title="关于netty"></a>关于netty</h1><p>netty与我的境遇发生在给别人写课设之中！！！</p><p>听起来是不是很意外，那是一个夜黑风高的夜晚，外面下着大雨，皎洁的夜光照在我的脸上，此时一名joker正在看这篇博客……………(皮一下🤭)</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="关于netty"><a href="#关于netty" class="headerlink" title="关于netty"></a>关于netty</h1><p>netty与我的境遇发生在给别人写课设之中！！！</p><p>听起来是不是很意外，那是一个夜黑风高的夜晚，外面下着大雨，皎洁的夜光照在我的脸上，此时一名joker正在看这篇博客……………(皮一下🤭)</p><p>netty官方源码（例子及用法说明一应俱全）：<a href="https://netty.io/wiki/index.html">https://netty.io/wiki/index.html</a></p><p>netty在github的源码地址：<a href="https://github.com/netty/netty">https://github.com/netty/netty</a></p><p>netty是我第一次关于服务器方面的应用开发的学习，虽然学校并没又这一门课，但是感觉还是蛮重要的而且很有趣就试着自学一下。</p><h2 id="netty是什么"><a href="#netty是什么" class="headerlink" title="netty是什么"></a>netty是什么</h2><p>netty是一个异步的，事件驱动的网络编程框架。</p><p>netty是一个基于NIO（非阻塞IO）开发的网络通信框架。既然说到了NIO就提一下BIO（阻塞IO）。</p><p>NIO，同步非阻塞IO，阻塞业务处理但不阻塞数据接收，适用于高并发且处理简单的场景，比如聊天软件。</p><p>BIO，同步阻塞IO，阻塞整个步骤，如果连接少，他的延迟是最低的，因为一个线程只处理一个连接，适用于少连接且延迟低的场景，比如说数据库连接。</p><p>两种I/O模型的对比：</p><p><img src="/postimg/netty-1.png">    <img src="/postimg/netty-2.png"></p><p>可以清楚的看到NIO在处理单线程的连接数量要比BIO高出很多。</p><h2 id="netty与tomcat"><a href="#netty与tomcat" class="headerlink" title="netty与tomcat"></a>netty与tomcat</h2><p>netty与tomcat一样，都是基于java的web服务。两者最大的区别在与通信协议。tomcat是基于http协议的，而netty则可以通过编程自定义各种协议。而且，netty调用API及其简单容易。</p><h2 id="netty的优势"><a href="#netty的优势" class="headerlink" title="netty的优势"></a>netty的优势</h2><p><strong>1、并发高</strong></p><p><strong>2、传输快</strong></p><p><strong>3、封装好</strong></p><p>​    前面已经说过，netty是一款基于NIO开发的网络通信框架，NIO是多个Socket对一个Selector，而BIO是一个Socket对一个Selector，在处理连接数量上NIO要比BIO高出很多，这也是为什么netty的并发性高的原因。</p><p>​    其次，netty依赖了NIO”零拷贝“特性，当他需要接收数据的时候，他会在堆内存之外开辟一块内存，数据就直接从IO读到了那块内存中去，在netty里面通过ByteBuf可以直接对这些数据进行直接操作，从而加快了传输速度。Java的内存有堆内存、栈内存和字符串常量池等等，其中堆内存是占用内存空间最大的一块，也是Java对象存放的地方，一般我们的数据如果需要从IO读取到堆内存，中间需要经过Socket缓冲区，也就是说一个数据会被拷贝两次才能到达他的的终点，如果数据量大，就会造成不必要的资源浪费。</p><p>​    Netty封装了NIO操作的很多细节，提供易于使用的API。</p><h2 id="根据源码测试echo和http-helloworld："><a href="#根据源码测试echo和http-helloworld：" class="headerlink" title="根据源码测试echo和http-helloworld："></a>根据源码测试echo和http-helloworld：</h2><p><img src="/postimg/netty-3.png"></p><p>echo：</p><p><img src="/postimg/netty-4.png">  <img src="/postimg/netty-5.png"></p><p>helloworld:</p><p><img src="/postimg/netty-6.png">   <img src="/postimg/netty-7.png"></p><p>源码已发布在gitee上，持续更新地址：<a href="https://gitee.com/tordan/study-netty">https://gitee.com/tordan/study-netty</a></p>]]></content>
     
     
       
