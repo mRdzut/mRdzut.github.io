@@ -179,6 +179,13 @@
   </url>
   
   <url>
+    <loc>http://example.com/tags/pwn/</loc>
+    <lastmod>2021-01-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/tags/buuctf/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
@@ -186,7 +193,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/pwn/</loc>
+    <loc>http://example.com/tags/netty/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -214,13 +221,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/netty/</loc>
-    <lastmod>2021-01-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
@@ -231,6 +231,13 @@
   
   <url>
     <loc>http://example.com/categories/Dmctf2020/</loc>
+    <lastmod>2021-01-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/categories/GeekPwn/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -251,14 +258,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/GeekPwn/</loc>
+    <loc>http://example.com/categories/%E5%A0%86/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E5%A0%86/</loc>
+    <loc>http://example.com/categories/netty%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -279,14 +286,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E5%AE%9E%E8%AE%AD/</loc>
-    <lastmod>2021-01-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/categories/netty%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
+    <loc>http://example.com/categories/do-global-dtors-aux/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -300,7 +300,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/do-global-dtors-aux/</loc>
+    <loc>http://example.com/categories/%E5%AE%9E%E8%AE%AD/</loc>
     <lastmod>2021-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
