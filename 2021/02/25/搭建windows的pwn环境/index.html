@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><!-- hexo injector head_begin start --><link href="https://cdn.jsdelivr.net/npm/hexo-widget-tree@0.1.1/css/index.css" rel="stylesheet"/><!-- hexo injector head_begin end --><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>搭建windows的pwn环境 | eternal</title><meta name="keywords" content="pwn"><meta name="author" content="eternal,1397239425@qq.com"><meta name="copyright" content="eternal"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="每次写pwn题的时候都要去打开虚拟机，感觉非常的麻烦而且很不方便，然后我就发现了win10下的终端神器——windows terminal 在win10商店可以直接免费下载。  通常我们打开的cmd和powershell看起来都比较low而且命令比较少，对于玩惯了linux系统的pwn选手来说非常的不友好，使用起来非常难受，而terminal做到了powershell、cmd、ubuntu的集成，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建windows的pwn环境">
+<meta property="og:url" content="http://example.com/2021/02/25/%E6%90%AD%E5%BB%BAwindows%E7%9A%84pwn%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="eternal">
+<meta property="og:description" content="每次写pwn题的时候都要去打开虚拟机，感觉非常的麻烦而且很不方便，然后我就发现了win10下的终端神器——windows terminal 在win10商店可以直接免费下载。  通常我们打开的cmd和powershell看起来都比较low而且命令比较少，对于玩惯了linux系统的pwn选手来说非常的不友好，使用起来非常难受，而terminal做到了powershell、cmd、ubuntu的集成，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2021-02-25T09:19:43.000Z">
+<meta property="article:modified_time" content="2021-02-25T10:39:55.254Z">
+<meta property="article:author" content="eternal">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/ad.jpg"><link rel="canonical" href="http://example.com/2021/02/25/%E6%90%AD%E5%BB%BAwindows%E7%9A%84pwn%E7%8E%AF%E5%A2%83/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: {"text":"A,B,C,D,E,F,G","fontSize":"15px"},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-02-25 18:39:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><link rel="stylesheet" href="APlayer.min.css"><div id="aplayer"></div><script src="https://cdn.jsdelivr.net/gh/radium-bit/res@master/live2d/autoload.js" async></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js" async></script><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="eternal" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/ccc.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> photos</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa fa-star"></i><span> 说说</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">eternal</a></span><span id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> photos</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa fa-star"></i><span> 说说</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">搭建windows的pwn环境</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-25T09:19:43.000Z" title="发表于 2021-02-25 17:19:43">2021-02-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-25T10:39:55.254Z" title="更新于 2021-02-25 18:39:55">2021-02-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>每次写pwn题的时候都要去打开虚拟机，感觉非常的麻烦而且很不方便，然后我就发现了win10下的终端神器——windows terminal</p>
+<p>在win10商店可以直接免费下载。</p>
+<p><img src="/postimg/terminal-1.png"></p>
+<p>通常我们打开的cmd和powershell看起来都比较low而且命令比较少，对于玩惯了linux系统的pwn选手来说非常的不友好，使用起来非常难受，而terminal做到了powershell、cmd、ubuntu的集成，就是可以在terminal同时打开这三个东西而不发生冲突，而且堆terminal进行魔改，工欲善其事必先利其器，一个看起来特别酷而且方便的东西你肯定也很想去使用它。（关于terminal的美化我这里介绍的很少，达不到你的期望可以去百度）</p>
+<p>可以看到这和原始的powershell相比炫酷吊炸天，而且win10自带的powshell版本比较老，功能也少，可以直接去下载比较新的powershell使用：<a target="_blank" rel="noopener" href="https://github.com/PowerShell/PowerShell">https://github.com/PowerShell/PowerShell</a></p>
+<p>（powershell支持大部分平台）</p>
+<p><img src="/postimg/terminal-2.png"></p>
+<p>关于powershell的插件：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 PSReadline 包，该插件可以让命令行很好用，类似 zsh</span></span><br><span class="line"><span class="built_in">Install-Module</span> <span class="literal">-Name</span> PSReadLine <span class="literal">-AllowPrerelease</span> <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装 posh-git 包，让你的 git 更好用</span></span><br><span class="line"><span class="built_in">Install-Module</span> posh<span class="literal">-git</span> <span class="literal">-Scope</span> CurrentUser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 安装 oh-my-posh 包，让你的命令行更酷炫、优雅</span></span><br><span class="line"><span class="built_in">Install-Module</span> <span class="built_in">oh</span><span class="literal">-my</span><span class="literal">-posh</span> <span class="literal">-Scope</span> CurrentUser</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后就是关于如何利用ternimal搭建pwn环境，win10下建议同时安装python2_x64和python3_x64两种版本，为了区别在powershell使用不同的python，可以将python2包中的python.exe和pythonw.exe修改为python2.exe和pythonw2.exe然后将python包的路径添加到环境变量path中即可。</p>
+<p>首先是下载ubuntu，有不同的版本可以选择，可以在win10商店下载但是默认下载到c盘比较占空间，还有一个方法是在<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/wsl/install-manual%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E5%8C%85%EF%BC%8C%E6%89%A9%E5%B1%95%E5%90%8D%E6%94%B9%E4%B8%BAzip%EF%BC%8C%E7%84%B6%E5%90%8E%E8%A7%A3%E5%8E%8B%E5%88%B0%E4%BD%A0%E6%83%B3%E6%94%BE%E7%9A%84%E5%9C%B0%E6%96%B9%EF%BC%8C%E6%89%93%E5%BC%80ubuntu.exe%E5%AE%89%E8%A3%85%E3%80%82">https://docs.microsoft.com/en-us/windows/wsl/install-manual下载安装包，扩展名改为zip，然后解压到你想放的地方，打开ubuntu.exe安装。</a></p>
+<p><img src="/postimg/terminal-3.png"></p>
+<p><img src="/postimg/terminal-4.png"></p>
+<p>这是我安装后的ubuntu（我没有设置用户和密码所以使用的时候默认root权限）</p>
+<p><img src="/postimg/terminal-5.png"></p>
+<p>然后就是一步步安装python3、pip3、pwntools、pwndbg、git等等你你所需要的东西。</p>
+<p>这里要说的是尽量不再使用python2，官方已经说明了对python2不再进行维护和更新，而且python2差不多完全已经被python3所代替了。</p>
+<p>apt换源：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#备份sources.list文件</span></span><br><span class="line">cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line"><span class="comment">#编辑文件，不存在就新建一个</span></span><br><span class="line">sudo vim /etc/apt/sources.list</span><br><span class="line"><span class="comment">#这里是清华源，根据不同版本自行选择（把里边的内容添加到文件最后就行了）</span></span><br><span class="line">https://mirrors.tuna.tsinghua.edu.cn/<span class="built_in">help</span>/ubuntu/</span><br><span class="line"><span class="comment">#更新源</span></span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+
+<p>python3：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install python3</span><br></pre></td></tr></table></figure>
+
+<p>pip3:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install python3-pip</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#更新pip（有时候会报错就把第一个pip改为pip3就行了）</span></span><br><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U</span><br><span class="line"><span class="comment">#换清华源（这里有非常大的可能出现报错，是python的一个bug，官方已经指出）</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"><span class="comment">#报错解决办法：从下面的网址下载文件</span></span><br><span class="line">https://bootstrap.pypa.io/get-pip.py</span><br><span class="line"><span class="comment">#执行命令</span></span><br><span class="line">python get-pip.py或者python3 get-pip.py</span><br><span class="line"><span class="comment">#然后再输入换源的命令就成功了</span></span><br><span class="line"><span class="comment">#更新源</span></span><br><span class="line">pip3 install --upgrade pip或者pip install --upgrade pip</span><br></pre></td></tr></table></figure>
+
+<p>pwntools：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo pip3 install pwntools或者sudo pip install pwntools</span><br></pre></td></tr></table></figure>
+
+<p>pwndbg:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#没有git的需要下载git</span></span><br><span class="line">git <span class="built_in">clone</span> https://gitee.com/tordan/pwndbg.git</span><br><span class="line"><span class="built_in">cd</span> pwndbg</span><br><span class="line">./setup.sh</span><br></pre></td></tr></table></figure>
+
+<p>one_gadget:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#这里我建议使用我的方法，ubuntu自带的ruby版本非常低，无法支持one_gadget的使用</span></span><br><span class="line"><span class="comment">#第一种是下载安装包手动安装，我把好几个版本都尝试了没有成功（无聊的可以试试）</span></span><br><span class="line">http://www.ruby-lang.org/en/downloads/</span><br><span class="line"><span class="comment">#第二种方法</span></span><br><span class="line"><span class="comment">#如果你没有听我的使用的是ubuntu自带的命令下载的，看一下版本，如果&gt;2.4那么恭喜你，可以使用one_gadget，如果版本低，那么跟着我输入命令</span></span><br><span class="line">ruby -v</span><br><span class="line"><span class="comment">#添加仓库</span></span><br><span class="line">sudo add-apt-repository ppa:brightbox/ruby-ng</span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment">#删除低版本的 ruby：</span></span><br><span class="line">sudo apt-get purge --auto-remove ruby</span><br><span class="line"><span class="comment">#安装 ruby-2.6/ruby-2.7 版本：（这里我也进行了尝试，可以下载ruby2.7和ruby2.6但是仓库是没有ruby3.0的）</span></span><br><span class="line">sudo apt-get install ruby2.6 ruby2.6-dev</span><br><span class="line">sudo apt-get install ruby2.7 ruby2.7-dev</span><br><span class="line"><span class="comment">#安装one_gadget</span></span><br><span class="line">sudo gem install one_gadget</span><br></pre></td></tr></table></figure>
+
+<p>LibcSearcher:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/tordan/LibcSearcher.git</span><br><span class="line"><span class="built_in">cd</span> LibcSearcher</span><br><span class="line">python setup.py develop/python3 setup.py develop</span><br></pre></td></tr></table></figure>
+
+<p>peda:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/longld/peda.git ~/peda</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;source ~/peda/peda.py&quot;</span> &gt;&gt; ~/.gdbinit</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;DONE! debug your program with gdb and enjoy</span></span><br></pre></td></tr></table></figure>
+
+<p>pwn_debug:(dl_runtime_reslove神器)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/tordan/pwn_debug.git</span><br><span class="line"><span class="built_in">cd</span> pwn_debug</span><br><span class="line">sudo python setup.py install </span><br><span class="line"><span class="comment"># or python setup.py install --user</span></span><br><span class="line">./build.sh</span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img src="/postimg/terminal-6.png"></p>
+<p>当然，如果你有git bash和kali等等其他好玩的东西也可以放到terminal上面比较方便，有一说一，terminal是真⑧错啊！！！</p>
+<p><img src="/postimg/terminal-7.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:1397239425@qq.com">eternal</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/02/25/%E6%90%AD%E5%BB%BAwindows%E7%9A%84pwn%E7%8E%AF%E5%A2%83/">http://example.com/2021/02/25/搭建windows的pwn环境/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">eternal</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/pwn/">pwn</a></div><div class="post_share"><div class="social-share" data-image="/img/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/02/11/buuctf%E5%88%B7%E9%A2%98/"><img class="next-cover" src="/img/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">buuctf刷题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/11/27/Geekpwn-pwn-writeup/" title="Geekpwn_pwn_writeup"><img class="cover" src="/img/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-27</div><div class="title">Geekpwn_pwn_writeup</div></div></a></div><div><a href="/2020/11/27/无输出操作之-do-global-dtors-aux/" title="无输出操作之__do_global_dtors_aux"><img class="cover" src="/img/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-27</div><div class="title">无输出操作之__do_global_dtors_aux</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/ccc.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">eternal</div><div class="author-info__description">池鱼思故渊</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mRdzut"><i class="fab fa-github"></i><span>mRdzut</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mRdzut" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="/img/qq.png" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/img/wechat.png" target="_blank" title="Wechat"><i class="fab fa-weixin"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎！</div></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/02/25/%E6%90%AD%E5%BB%BAwindows%E7%9A%84pwn%E7%8E%AF%E5%A2%83/" title="搭建windows的pwn环境"><img src="/img/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搭建windows的pwn环境"/></a><div class="content"><a class="title" href="/2021/02/25/%E6%90%AD%E5%BB%BAwindows%E7%9A%84pwn%E7%8E%AF%E5%A2%83/" title="搭建windows的pwn环境">搭建windows的pwn环境</a><time datetime="2021-02-25T09:19:43.000Z" title="发表于 2021-02-25 17:19:43">2021-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/11/buuctf%E5%88%B7%E9%A2%98/" title="buuctf刷题"><img src="/img/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="buuctf刷题"/></a><div class="content"><a class="title" href="/2021/02/11/buuctf%E5%88%B7%E9%A2%98/" title="buuctf刷题">buuctf刷题</a><time datetime="2021-02-10T16:10:45.000Z" title="发表于 2021-02-11 00:10:45">2021-02-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/11/hgame2021-week1-pwn/" title="hgame2021-week1-pwn"><img src="/img/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hgame2021-week1-pwn"/></a><div class="content"><a class="title" href="/2021/02/11/hgame2021-week1-pwn/" title="hgame2021-week1-pwn">hgame2021-week1-pwn</a><time datetime="2021-02-10T16:02:39.000Z" title="发表于 2021-02-11 00:02:39">2021-02-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/04/%E8%B6%85%E5%AE%9E%E7%94%A8%E6%9B%B4%E6%96%B0%E5%8D%9A%E5%AE%A2%E8%84%9A%E6%9C%AC/" title="超实用更新博客脚本"><img src="/img/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="超实用更新博客脚本"/></a><div class="content"><a class="title" href="/2021/02/04/%E8%B6%85%E5%AE%9E%E7%94%A8%E6%9B%B4%E6%96%B0%E5%8D%9A%E5%AE%A2%E8%84%9A%E6%9C%AC/" title="超实用更新博客脚本">超实用更新博客脚本</a><time datetime="2021-02-04T15:39:50.000Z" title="发表于 2021-02-04 23:39:50">2021-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/01/24/%E5%A0%86%E5%A4%8D%E4%B9%A03-double%E2%80%94free/" title="堆复习3-double—free"><img src="/img/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="堆复习3-double—free"/></a><div class="content"><a class="title" href="/2021/01/24/%E5%A0%86%E5%A4%8D%E4%B9%A03-double%E2%80%94free/" title="堆复习3-double—free">堆复习3-double—free</a><time datetime="2021-01-24T09:48:32.000Z" title="发表于 2021-01-24 17:48:32">2021-01-24</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/gkihqEjXxJ5UZ1C.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By eternal</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '8qhbuvXq0Y4PfhWjKeHvarLj-MdYXbMMI',
+      appKey: 'DIzddSk68kLdHdJubMjKe1Nc',
+      placeholder: '请多多指教',
+      avatar: 'monsterid',
+      meta: 'nick,mail'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" async="async" mobile="false"></script></div><!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/hexo-widget-tree@0.1.1/js/index.js"></script><div id="widget-tree">
+      <ul><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/Dmctf2020/">Dmctf2020</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/12/01/Dmctf-pwn%E9%A2%98%E8%A7%A3/" title="Dmctf_pwn题解"><i class="post-icon gg-file-document"></i>Dmctf_pwn题解</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/GeekPwn/">GeekPwn</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/11/27/Geekpwn-pwn-writeup/" title="Geekpwn_pwn_writeup"><i class="post-icon gg-file-document"></i>Geekpwn_pwn_writeup</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/do-global-dtors-aux/">__do_global_dtors_aux</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/11/27/%E6%97%A0%E8%BE%93%E5%87%BA%E6%93%8D%E4%BD%9C%E4%B9%8B-do-global-dtors-aux/" title="无输出操作之__do_global_dtors_aux"><i class="post-icon gg-file-document"></i>无输出操作之__do_global_dtors_aux</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/buuctf/">buuctf</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/02/11/buuctf%E5%88%B7%E9%A2%98/" title="buuctf刷题"><i class="post-icon gg-file-document"></i>buuctf刷题</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/docker%E3%80%81docker-compose%E3%80%81wordpress/">docker、docker-compose、wordpress</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/12/27/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD2-2/" title="硬件实训2-2"><i class="post-icon gg-file-document"></i>硬件实训2-2</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/exsi/">exsi</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/12/27/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD2-1/" title="硬件实训2-1"><i class="post-icon gg-file-document"></i>硬件实训2-1</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/heap/">heap</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/12/02/ZJCTF-2019-EasyHeap/" title="ZJCTF_2019_EasyHeap"><i class="post-icon gg-file-document"></i>ZJCTF_2019_EasyHeap</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/hgame2021/">hgame2021</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/02/11/hgame2021-week1-pwn/" title="hgame2021-week1-pwn"><i class="post-icon gg-file-document"></i>hgame2021-week1-pwn</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/netty%E6%9C%8D%E5%8A%A1%E5%99%A8/">netty服务器</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/01/03/%E5%88%9D%E6%8E%A2netty/" title="初探netty"><i class="post-icon gg-file-document"></i>初探netty</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/python%E8%84%9A%E6%9C%AC/">python脚本</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/02/04/%E8%B6%85%E5%AE%9E%E7%94%A8%E6%9B%B4%E6%96%B0%E5%8D%9A%E5%AE%A2%E8%84%9A%E6%9C%AC/" title="超实用更新博客脚本"><i class="post-icon gg-file-document"></i>超实用更新博客脚本</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/%E5%9B%BA%E4%BB%B6/">固件</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/12/19/%E5%B0%8F%E8%AF%95%E7%89%9B%E5%88%80iot/" title="小试牛刀iot"><i class="post-icon gg-file-document"></i>小试牛刀iot</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/%E5%A0%86/">堆</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/01/23/%E5%A0%86%E5%A4%8D%E4%B9%A02-off-by-one%E5%8A%A0unlink/" title="堆复习2-off-by-one加unlink"><i class="post-icon gg-file-document"></i>堆复习2-off-by-one加unlink</a></li><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/01/24/%E5%A0%86%E5%A4%8D%E4%B9%A03-double%E2%80%94free/" title="堆复习3-double—free"><i class="post-icon gg-file-document"></i>堆复习3-double—free</a></li><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/01/22/%E5%A0%86%E5%A4%8D%E4%B9%A0%E4%B9%8Boff-by-one%E5%92%8Cunlink/" title="堆复习之off_by_one和unlink"><i class="post-icon gg-file-document"></i>堆复习之off_by_one和unlink</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/%E5%AE%9E%E8%AE%AD/">实训</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/12/14/%E7%A1%AC%E4%BB%B6%E5%AE%9E%E8%AE%AD%E4%B8%80/" title="硬件实训一"><i class="post-icon gg-file-document"></i>硬件实训一</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2020/11/27/ctf%E9%A2%98%E7%9B%AE%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="ctf题目环境搭建"><i class="post-icon gg-file-document"></i>ctf题目环境搭建</a></li><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/02/25/%E6%90%AD%E5%BB%BAwindows%E7%9A%84pwn%E7%8E%AF%E5%A2%83/" title="搭建windows的pwn环境"><i class="post-icon gg-file-document"></i>搭建windows的pwn环境</a></li></ul></li><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/%E8%85%BE%E8%AE%AF%E4%BA%91/">腾讯云</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/2021/01/04/%E8%85%BE%E8%AE%AF%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C/" title="腾讯云服务器初体验"><i class="post-icon gg-file-document"></i>腾讯云服务器初体验</a></li></ul></li></ul>
+        <div id="widget-tree-button">
+          <i class="gg-chevron-right"></i>
+        </div>
+      </div><!-- hexo injector body_end end --><script src="/live2d_models/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d_models/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2d_models/assets/assets/haru01.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
